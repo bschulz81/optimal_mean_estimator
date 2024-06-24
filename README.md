@@ -65,7 +65,7 @@ by default, delta=0.05.
 
 The module also has a function
 
-optimal_mean_estimator_flattened
+mean_flattened
 
 This function works in the same way as optimal_mean_estimator, but it flattens the arrays that it recieves
 and also has no optional out parameter. Instead of a matrix, it returns single int, float or complex values.
