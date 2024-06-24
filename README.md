@@ -171,7 +171,7 @@ def mean_flattened(x, delta=0.05,dtype=None,where=None):
 # Examples:
 ## Example 1
 
-    import numpy as
+    import numpy as np
 
     import optimal_mean_estimator.optimalmean as ope
 
@@ -192,7 +192,7 @@ def mean_flattened(x, delta=0.05,dtype=None,where=None):
 
 ## Example 2
 
-    import numpy as
+    import numpy as np
 
     import optimal_mean_estimator.optimalmean as ope
 
@@ -223,7 +223,7 @@ def mean_flattened(x, delta=0.05,dtype=None,where=None):
 
 ## Example 3
 
-    import numpy as
+    import numpy as np
 
     import optimal_mean_estimator.optimalmean as ope
 
@@ -251,7 +251,7 @@ that are not heavily tailed, the estimator yields similarly good results as the 
 However, for heavily asymmetric distributions, like the inverse Gamma, or worse the exponential distributions, the ordinary sample mean seems to
 perform much better.
 
-    import numpy as
+    import numpy as np
 
     import optimal_mean_estimator.optimalmean as ope
 
