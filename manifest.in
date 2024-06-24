@@ -1,0 +1,4 @@
+include *.txt
+include *.md
+include License
+include optimal_mean_estimator/*.py
