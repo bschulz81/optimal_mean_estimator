@@ -13,23 +13,23 @@ As the provided examples show, the estimator is superior to the ordinary sample 
 elements x_i and size x.size:
 
 for symmetric heavily tailed distributions, like the T or the Laplace distributions.
-In 1000 trials, the optimal estimator is better or equal for roughly 647 trial runs
-and the sample mean is better in just 350 trials.
+In 1000 trials, the optimal estimator is better or equal for roughly 667 trial runs
+and the sample mean is better or equal in just 333 trials.
 
 For standard normal distributions, a few executions of the last example show that the estimator
 is somewhat equal to the population mean (within the supplied confidence interval delta and
 apart from numerical floating point imprecisions). In 1000 trial runs, the optimal estimator mean is
-better or equal than the sample mean in 513 runs and in 484 cases sample mean is equal or better.
+better or equal than the sample mean in 501 runs and in 599 cases sample mean is equal or better.
 
 
 Unfortunately, it appears that for skewed distributions, problems can arise.
 
 For the inverse gamma distribution and 1000 mean estimations, the sample mean is better or equal than the optimal mean estimator
-in 504 cases, while the optimal mean estimator is better or equal in 493 cases.
+in 523 cases, while the optimal mean estimator is better or equal in 477 cases.
 
 It appears that this has something to do with the asymmetry. The exponential distribution is even more
 skewed than the inverse Gamma distribution. In 1000 trial runs, the sample mean is better or equal in
-517 cases and than the optimal estimator is better in 480 cases for the exponential distribution.
+514 cases and than the optimal estimator is better in 486 cases for the exponential distribution.
 
 More trials seem to establish the picture that there is a perhaps numerical problem with skewed distributions.
 
