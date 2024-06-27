@@ -281,7 +281,7 @@ def mean_flattened(x, delta=0.01,dtype=None,where=None):
     
     """We apply the mask if given"""
     
-   x_flattened=x.flatten()
+    x_flattened=x.flatten()
     if where is not None:
         where_flattened=where.flatten()
         x_filtered=x_flattened[where_flattened]
