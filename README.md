@@ -24,7 +24,7 @@ better or equal than the sample mean in 513 runs and in 484 cases sample mean is
 
 Unfortunately, it appears that for skewed distributions, problems can arise.
 
-For the inverse gamma distribution and 1000 mean estimations, the population mean is better or equal than the sample mean
+For the inverse gamma distribution and 1000 mean estimations, the sample mean is better or equal than the sample mean
 in 504 cases, while the optimal mean estimator is better or equal in 493 cases.
 
 It appears that this has something to do with the asymmetry. The exponential distribution is even more
