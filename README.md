@@ -9,8 +9,8 @@ J. C. H. Lee and P. Valiant, "Optimal Sub-Gaussian Mean Estimation in  R"
 Denver, CO, USA, 2022, pp. 672-683, doi: 10.1109/FOCS52979.2021.00071.
 https://arxiv.org/abs/2011.08384
 
-As the provided examples show, the estimator is superior to the ordinary sample mean for an array with
-elements x_i and size x.size: X=1/x.size*sum_i x_i
+As the provided examples show, the estimator is superior to the ordinary sample mean X=1/x.size*sum_i x_i for an array with
+elements x_i and size x.size:
 
 for symmetric heavily tailed distributions, like the T or the Laplace distributions.
 In 1000 trials, the optimal estimator is better or equal for roughly 647 trial runs
@@ -312,9 +312,9 @@ perform sometimes  better by a small amount.
 
         error2[i]=(populationmean[i]-result2[i])**2
 
-        if error1[i]<error2[i]:p=p+1
+        if error1[i]<=error2[i]:p=p+1
 
-        if error2[i]<error1[i]:c=c+1
+        if error2[i]<=error1[i]:c=c+1
 
         i=i+1
 
@@ -334,15 +334,14 @@ perform sometimes  better by a small amount.
         case _: print(" for a T distribution with df=3 \n ")
 
 
-    print(p," times the population mean was best \n",
+    print(p," times the sample mean was better or equal than the optimal mean estimator \n",
         "\n average error to the populationmean ",
         np.mean(error1), "\n\n", )
 
-    print(c, " times the corrected median of means was better than the populationmean\n" ,
+    print(c, " times the optimal mean estimator was better or equal than the sample mean\n" ,
         "\n average error to the populationmean ",
         np.mean(error2),"\n\n")
 
     plt.hist(population, bins='auto')  # arguments are passed to np.histogram
     plt.title("distribution Histogram")
     plt.show()
-
