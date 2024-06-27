@@ -268,6 +268,8 @@ perform sometimes  better by a small amount.
     result2=np.zeros(shape=(1000))
 
     populationmean=np.zeros(shape=(1000))
+    
+    skewness=np.zeros(shape=(1000))
 
     userinput= int(input("""put in 1 for a T distribution with df=3
 
@@ -301,9 +303,11 @@ perform sometimes  better by a small amount.
             case _: population = np.random.standard_t(df=3, size=100000)
 
         populationmean[i]=np.mean(population)
-
+        skewness[i]=scipy.stats.skew(population)
+        
         sample = np.array(random.choices(population, k=1000))
-
+        
+        
         result1[i]=np.mean(sample)
 
         error1[i]=(populationmean[i]-result1[i])**2
@@ -335,13 +339,15 @@ perform sometimes  better by a small amount.
 
 
     print(p," times the sample mean was better or equal than the optimal mean estimator \n",
-        "\n average error to the populationmean ",
+        "\n average squared error to the populationmean ",
         np.mean(error1), "\n\n", )
 
     print(c, " times the optimal mean estimator was better or equal than the sample mean\n" ,
-        "\n average error to the populationmean ",
+        "\n average squared error to the populationmean ",
         np.mean(error2),"\n\n")
-
+        
+    print("mean skewness of the population", np.mean(skewness))
+    
     plt.hist(population, bins='auto')  # arguments are passed to np.histogram
     plt.title("distribution Histogram")
     plt.show()
