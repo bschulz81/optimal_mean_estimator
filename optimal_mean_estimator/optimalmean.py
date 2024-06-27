@@ -280,10 +280,13 @@ def mean_flattened(x, delta=0.01,dtype=None,where=None):
     """
     
     """We apply the mask if given"""
+    
+   x_flattened=x.flatten()
     if where is not None:
-        x_filtered=x[where]
+        where_flattened=where.flatten()
+        x_filtered=x_flattened[where_flattened]
     else: 
-        x_filtered=x
+        x_filtered=x_flattened
      
         
     """ if the values were integers, store the intermediate values for the means and corrections
