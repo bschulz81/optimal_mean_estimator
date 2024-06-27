@@ -1,3 +1,4 @@
+
 # Description:
 
 This module is a python implementation of the optimal subgaussian mean estimator
@@ -8,41 +9,36 @@ J. C. H. Lee and P. Valiant, "Optimal Sub-Gaussian Mean Estimation in  R"
 Denver, CO, USA, 2022, pp. 672-683, doi: 10.1109/FOCS52979.2021.00071.
 https://arxiv.org/abs/2011.08384
 
-As the provided examples show, the estimator is superior to the ordinary population mean
+As the provided examples show, the estimator is superior to the ordinary sample mean for an array with
+elements x_i and size x.size: X=1/x.size*sum_i x_i
+
 for symmetric heavily tailed distributions, like the T or the Laplace distributions.
-In 1000 trials, the optimal estimator is better roughly 662 trial runs
-and the population mean is better in just 338 trials.
+In 1000 trials, the optimal estimator is better or equal for roughly 647 trial runs
+and the sample mean is better in just 350 trials.
 
 For standard normal distributions, a few executions of the last example show that the estimator
 is somewhat equal to the population mean (within the supplied confidence interval delta and
-apart from numerical floating point imprecisions). In 1000 trial runs, the population mean is
-sometimes slightly better in 516 runs and in 484 cases the optimal estimator is better.
+apart from numerical floating point imprecisions). In 1000 trial runs, the optimal estimator mean is
+better or equal than the sample mean in 513 runs and in 484 cases sample mean is equal or better.
 
 
-Unfortunately, it appears that for asymmetric distributions, like the inverse Gamma distribution,
-or the exponential distribution, the ordinary population mean is better, even though the difference
-is not as much as in the case of the T or Laplace distributions. For 1000 trial runs with the inverse Gamma,
-the population mean is roughly 530 trials better than the optimal estimator mean, which is better in 470 cases.
+Unfortunately, it appears that for skewed distributions, problems can arise.
+
+For the inverse gamma distribution and 1000 mean estimations, the population mean is better or equal than the sample mean
+in 504 cases, while the optimal mean estimator is better or equal in 493 cases.
 
 It appears that this has something to do with the asymmetry. The exponential distribution is even more
-asymmetric than the inverse Gamma distribution. In 1000 trial runs, the population mean is better in
-576 cases and than the optimal estimator is better in 424 cases.
+skewed than the inverse Gamma distribution. In 1000 trial runs, the sample mean is better or equal in
+517 cases and than the optimal estimator is better in 480 cases for the exponential distribution.
 
-More trials seem to establish this picture. The estimator works as good as the population mean for symmetric
-Gaussian distributions. It works much better than the population mean for symmetric heavy tailed distributions
-but it appears to have problems with asymmetric distributions. One should note, however, that these problems
-are not as large as the improvements that one gets in the heavy tailed case.
-
-Not only the number of "better" trials are important but also the error margin, which for heavy tailed distributions
-is considerably lower with the optimal estimator.
-
+More trials seem to establish the picture that there is a perhaps numerical problem with skewed distributions.
 
 
 The implementation consists of a function
 
 mean
 
-that computes the optimal mean estimator for numpy arrays.
+it computes the optimal mean estimator for numpy arrays.
 
 it expects a numpy array a, a confidence parameter delta and its other
 arguments match the behavior of the numpy.mean function whose documentation is
@@ -67,7 +63,7 @@ The module also has a function
 
 mean_flattened
 
-This function works in the same way as mean, but it flattens the arrays that it recieves
+This function works in the same way as optimal_mean_estimator, but it flattens the arrays that it recieves
 and also has no optional out parameter. Instead of a matrix, it returns single int, float or complex values.
 
 # Definitions:
@@ -248,8 +244,8 @@ This example shows that the estimator works for heavy tailed distribution like t
 If executed several times, it also shows that, appart from small numerical floating point problems, for symmetric distributions
 that are not heavily tailed, the estimator yields similarly good results as the ordinary sample mean.
 
-However, for heavily asymmetric distributions, like the inverse Gamma, or worse the exponential distributions, the ordinary sample mean seems to
-perform much better.
+However, for heavily skewed distributions, like the inverse Gamma, or worse the exponential distributions, the ordinary sample mean seems to
+perform sometimes  better by a small amount.
 
     import numpy as np
 
