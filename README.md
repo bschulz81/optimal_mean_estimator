@@ -19,7 +19,7 @@ and the sample mean is better or equal in just 333 trials.
 For standard normal distributions, a few executions of the last example show that the estimator
 is somewhat equal to the population mean (within the supplied confidence interval delta and
 apart from numerical floating point imprecisions). In 1000 trial runs, the optimal estimator mean is
-better or equal than the sample mean in 501 runs and in 599 cases sample mean is equal or better.
+better or equal than the sample mean in 501 runs and in 499 cases sample mean is equal or better.
 
 
 Unfortunately, it appears that for skewed distributions, problems can arise.
