@@ -66,7 +66,7 @@ only for flattened arrays, and it also has no optional out parameter
 
 import numpy as np
 import scipy 
-
+import math
 
 def mean (a,delta=0.01, axis=None,dtype=None,out=None,keepdims=False,where=None):
     """
@@ -231,7 +231,15 @@ def _kth_largest(a, k):
     k = a.size - 1 - k 
     return np.partition(a, k)[k] 
 
-def mean_flattened(x, delta=0.05,dtype=None,where=None):
+
+
+def _is_prime(n):
+  for i in range(2,int(math.sqrt(n))+1):
+    if (n%i) == 0:
+      return False
+  return True
+
+def mean_flattened(x, delta=0.01,dtype=None,where=None):
     """
     Computes the optimal mean estimator of
     
@@ -241,17 +249,14 @@ def mean_flattened(x, delta=0.05,dtype=None,where=None):
     https://arxiv.org/abs/2011.08384
     
     
-    for the flattened numpy array. It is slightly faster than
-    mean because it does not make computations to determine
-    the axes of the result.
+    for flattened numpy arrays with one axis.
     
     Args:
         a: A numpy array whose mean is computed. can by of integer, floating or 
         complex type and have arbitrary axes.
-
-        delta: a float value. The computed estimator fulfills        
-               P(|mu-mean|<epsilon)>=1-delta. The default is 0.001. Note that
-               the size of the sample must be larger than ln(1/delta).
+        
+        delta: a float value. The computed estimator fulfills
+                P(|mu-mean|<epsilon)>=1-delta
         
        
         dtype:  numpy type of the computed result. Per default, if a is an 
@@ -259,8 +264,7 @@ def mean_flattened(x, delta=0.05,dtype=None,where=None):
                 specified explicitly, the default return is of the same type 
                 as the array a.
                 Note that if an int type is specified, float64 values are used
-                during the computation as intermediate values, 
-                in order to increase precision of the casted final results.
+                during the computation in order to increase precision.
         
         where: a boolean numpy array. Elements set to false are discarded from the
                 computation
@@ -275,56 +279,64 @@ def mean_flattened(x, delta=0.05,dtype=None,where=None):
         P(|mu-mean|<epsilon)>=1-delta
     """
     
-    """We flatten and apply the mask if given"""
-    x_flattened=x.flatten()
+    """We apply the mask if given"""
     if where is not None:
-        where_flattened=where.flatten()
-        x_filtered=x_flattened[where_flattened]
+        x_filtered=x[where]
     else: 
-        x_filtered=x_flattened
+        x_filtered=x
      
+        
+    """ if the values were integers, store the intermediate values for the means and corrections
+     as float64. if the values were some other format, use this format to store the means. Note that
+     the specified argument dtype has no effect on these intermediate values"""
+     
+    if np.issubdtype(x_filtered.dtype, np.integer): 
+        ddtype1=np.float64 
+    else:
+        ddtype1=x_filtered.dtype
+     
+    
+         
     """compute the number of bags as in https://arxiv.org/abs/2011.08384"""
     
-    loginvdelta=np.log(1.0/abs(delta))
+    n_bags=int(np.log(1.0/abs(delta)))
+    loginvdelta=float(n_bags)
     
-    n_bags=int(loginvdelta)
-    
-    """if the number of bags is larger than the array size, set it to the arraysize,
-    and correct the log delta parameter"""
-    if n_bags > x_filtered.size: 
-        n_bags = int(np.ceil(x_filtered.size / 3.0))
-        loginvdelta=float(n_bags)
-    """if the number of bags is smaller than 1, set it to 1 
-    and adjust the log delta parameter""" 
-    if n_bags<1: 
+    """ensure that there is always least one bag"""
+    if n_bags<=1: 
         n_bags=1
-        loginvdelta=float(n_bags)
+        loginvdelta=1.0
+        onethirdloginv=loginvdelta/3.0
+        medianofmeans=np.mean(x_filtered,dtype=ddtype1)
 
-    
-    onethirdloginv=loginvdelta/3.0
-    
-    """ if the values were integers, store the intermediate values for the means and corrections
-    as float64. if the values were some other format, use this format to store the means. Note that
-    the specified argument dtype has no effect on these intermediate values"""
-    
-    if np.issubdtype(x_filtered.dtype, np.integer): 
-       ddtype1=np.float64 
     else:
-       ddtype1=x_filtered.dtype
-     
-    means=np.zeros([n_bags],dtype=ddtype1)
-    
-    """compute the median of means in the different, randomly shuffled bags. note that the mean
-    is computed with numpy default datatypes, even if int was specified. The type cast is done after the 
-    computation"""
-    ind =  np.tile(np.arange(n_bags), int(x_filtered.size / n_bags))
+        """if the number of elements is prime, then use one bag for every element. 
+           The alternative would be to trim the data and remove one value"""
+        if _is_prime(x_filtered.size):
+            n_bags = x_filtered.size
+            
+        """if the number of bags is larger or equal than the array size, set it to the array size """
+        if n_bags > x_filtered.size: 
+            n_bags=x_filtered.size
 
-    np.random.shuffle(ind)
-    for bag in range(n_bags):
-        means[bag] =np.mean(x_filtered.take(np.where(ind == bag)))  
-                       
-    medianofmeans=np.median(means)
-    
+        """set the number of bags such that the elements can at least be evenly distributed
+           i.e. one has the same number of elements in each bag"""
+        while(x_filtered.size % n_bags!=0):
+            n_bags=n_bags+1
+               
+        loginvdelta=float(n_bags)
+        
+        means=np.zeros(n_bags,dtype=ddtype1)
+        
+        """compute the median of means in the different, randomly shuffled bags. note that the mean
+            is computed with numpy default datatypes, even if int was specified. The type cast is done after the 
+            computation"""
+        ind =  np.tile(np.arange(n_bags), int(x_filtered.size / n_bags))
+        np.random.shuffle(ind)
+        for bag in range(n_bags):
+            means[bag] =np.mean(x_filtered.take(np.where(ind == bag)),dtype=ddtype1)  
+        medianofmeans=np.median(means)
+        
     
     """now solve the equation sum_i min(alpha*mhelpersq_i, 1)- 1/3 log(1/delta)=0,
     we use brentq as it is very fast. This solver needs an interval. The border
@@ -337,6 +349,7 @@ def mean_flattened(x, delta=0.05,dtype=None,where=None):
     mhelper=x_filtered-medianofmeans
     mhelpersq=mhelper*mhelper
     
+    onethirdloginv=loginvdelta/3.0
     rightinterval=1.0/_kth_largest(mhelpersq,int(onethirdloginv+1.0))
      
     alpha=scipy.optimize.brentq(_f,a=0.0,b=rightinterval,args=(mhelpersq,onethirdloginv))
@@ -351,6 +364,7 @@ def mean_flattened(x, delta=0.05,dtype=None,where=None):
     as the type of the supplied array, or, if an output type was set, set the array type
     to this value"""
     
+    ddtype=np.float64
     
     if dtype is None:
       if np.issubdtype(x_filtered.dtype, np.integer): 
@@ -363,4 +377,3 @@ def mean_flattened(x, delta=0.05,dtype=None,where=None):
     mean=np.array([medianofmeans+1.0/x_filtered.size*np.sum(mhelper*(1.0-mhelper2))],dtype=ddtype)
     
     return mean[0]
-
