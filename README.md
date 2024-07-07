@@ -51,16 +51,17 @@ The module also has a function
 This function works in the same way as optimal_mean_estimator, but it flattens the arrays that it recieves and also has no optional out parameter. Instead of a matrix, it returns single int, float or complex values.
 
 Definitions:
-for arrays in arbitrary shapes:
-def mean (a,delta=0.01, axis=None,dtype=None,out=None,keepdims=False,where=None): """ Computes the optimal mean estimator of
+
+for arrays in arbitrary shapes
+
+    def mean (a,delta=0.01, axis=None,dtype=None,out=None,keepdims=False, where=None, skewness_tolerance=0.988,correctionfactor=None,bagnumber=None, trimarray_if_prime_elements=False)
+
+Computes the optimal mean estimator of
 
 J. C. H. Lee and P. Valiant, "Optimal Sub-Gaussian Mean Estimation in  R"
 2021 IEEE 62nd Annual Symposium on Foundations of Computer Science (FOCS),
 Denver, CO, USA, 2022, pp. 672-683, doi: 10.1109/FOCS52979.2021.00071.
 https://arxiv.org/abs/2011.08384
-
-
-for numpy arrays.
 
     Args:
     a: A numpy array whose mean is computed. can by of integer, floating or
@@ -119,11 +120,13 @@ otherwise it is the array's datatype if no type was supplied. if a type
 was supplied the output is that specified datatype
 
 
-and:
+and
 
-For flattened arrays numpy
 
-    def mean_flattened(x, delta=0.05,dtype=None,where=None): """ Computes the optimal mean estimator of
+
+    mean_flattened(x, delta=0.05,dtype=None,where=None)
+
+Computes the optimal mean estimator of
 
 J. C. H. Lee and P. Valiant, "Optimal Sub-Gaussian Mean Estimation in  R"
 2021 IEEE 62nd Annual Symposium on Foundations of Computer Science (FOCS),
@@ -356,5 +359,6 @@ Therefore, in this new version a check for skewness is included, so that, for sk
         np.mean(error2),"\n\n")
 
     print("mean skewness of the population", np.mean(skewness))
+
 
 
