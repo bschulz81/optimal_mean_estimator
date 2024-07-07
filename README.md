@@ -16,17 +16,19 @@ For the inverse gamma distribution and 1000 mean estimations, the population mea
 
 It appears that this has something to do with the asymmetry and the correction factor computed in https://arxiv.org/abs/2011.08384
 
-Therefore, the new version automatically checks for the skewness of the distribution and for samples which are skewed it returns the ordinary mean.
+Therefore, the new version automatically checks for the skewness of the distribution.
+For samples which are skewed it it now returns the ordinary mean by default.
 
 The library also has the option to overwrite this behavior. The tolerance how skewed a distribution can be can now be set, additionally,
 an own correction factor can be supplied. This may be useful if the distribution formula is known and one can calculate this factor.
 
+The last example has two commented lines. if they are removed, one needs to install a package for a skewed t distribution.
+This distribution has both heavy tails and is skewed. By supplying an own large skewness tolerance parameter  can check, that due to the heavy tails,
+the optimized estimator can be sometimes be better despite of the shape of the distribution. In the end, for skewed distributions, the correction factor has to be calculated, which 
+is why it can now be supplied to the function.
+
 Furthermore, the number of bags can be specified if desired, and if the number of elements in the array is a prime that can not be evenly partitioned into bags,
 one has the option to trim the array by one element or indeed create one bag for each element.
-
-
-
-More trials seem to establish the picture that there is a perhaps numerical problem with skewed distributions.
 
 The implementation consists of a function
 
