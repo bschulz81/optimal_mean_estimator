@@ -1,0 +1,7 @@
+2.0.0 new release:
+    per default, the library now checks for skewed distributions and returns the ordinary mean for them.
+    The user can now supply an own correction parameter and a separate bag number in order to account for skewed distributions
+    fixed  the right border of the interval where the equation for alpha is solved if the matrix medianofmeans-x_filtered has many zeros.
+    If the number of elements in the array is prime, the library has now the option to remove one random element that one can more easily partition it into bags
+1.0.1 bugfix release for even partitions of the array
+1.0.0 first release
