@@ -37,7 +37,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
 name='optimal_mean_estimator',
-version='1.0.1',
+version='2.0.0',
 author='Benjamin Schulz',
 description='a Python implementation of the optimal subgaussian mean estimator that was published by Lee and Valiant at https://arxiv.org/abs/2011.08384',
 long_description=long_description,
