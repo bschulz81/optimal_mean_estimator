@@ -10,14 +10,12 @@ for symmetric heavily tailed distributions, like the T or the Laplace distributi
 
 For standard normal distributions, a few executions of the last example show that the estimator is somewhat equal to the population mean (within the supplied confidence interval delta and apart from numerical floating point imprecisions). In 1000 trial runs, the optimal estimator mean is better or equal than the sample mean in 513 runs and in 484 cases sample mean is equal or better.
 
-Unfortunately, it appeared that for skewed distributions, problems can arise
+Unfortunately, it appeared that for skewed distributions, problems in the accuracy can arise. The mean estimator turns out to be more often worse than the ordinary sample mean.
+It appears that this has something to do with the asymmetry and the correction factor computed in https://arxiv.org/abs/2011.08384 from a Taylor series.
 
-For the inverse gamma distribution and 1000 mean estimations, the population mean is better or equal than the sample mean in 504 cases, while the optimal mean estimator is better or equal in 493 cases.
+Therefore, the new version of the library automatically checks for the skewness of the distribution.
 
-It appears that this has something to do with the asymmetry and the correction factor computed in https://arxiv.org/abs/2011.08384
-
-Therefore, the new version automatically checks for the skewness of the distribution.
-For samples which are skewed it it now returns the ordinary mean by default.
+For samples which are skewed it it now returns the ordinary mean by default. Thereby, as long as the skewness is finite, it should mostly produce better or equally good results as the ordinary mean
 
 The library also has the option to overwrite this behavior. The tolerance how skewed a distribution can be can now be set, additionally,
 an own correction factor can be supplied. This may be useful if the distribution formula is known and one can calculate this factor.
